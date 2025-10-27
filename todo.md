@@ -24,3 +24,9 @@
 - [x] Add Georgia Tech logo on right side
 - [x] Add company photo in the middle
 
+
+
+- [x] Change header background to black
+- [x] Change header text to yellow
+- [x] Add promotional photo in top middle of header
+

@@ -7,7 +7,7 @@ export default function SubmissionSuccess() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm">
+      <header className="bg-black shadow-lg">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-8">
             {/* University of Phoenix Logo */}
@@ -21,7 +21,7 @@ export default function SubmissionSuccess() {
             
             {/* Center Content */}
             <div className="flex-1 text-center">
-              <h1 className="text-2xl font-bold text-blue-900">Divalaser Software Solutions</h1>
+              <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
             </div>
             
             {/* Georgia Tech Logo */}

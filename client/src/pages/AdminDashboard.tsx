@@ -49,7 +49,7 @@ export default function AdminDashboard() {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-        <header className="border-b bg-white shadow-sm">
+        <header className="bg-black shadow-lg">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between gap-8">
               {/* University of Phoenix Logo */}
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
               
               {/* Center Content */}
               <div className="flex-1 text-center">
-                <h1 className="text-2xl font-bold text-blue-900">Divalaser Software Solutions</h1>
+                <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
               </div>
               
               {/* Georgia Tech Logo */}
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
   if (user?.role !== 'admin') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-        <header className="border-b bg-white shadow-sm">
+        <header className="bg-black shadow-lg">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between gap-8">
               {/* University of Phoenix Logo */}
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
               
               {/* Center Content */}
               <div className="flex-1 text-center">
-                <h1 className="text-2xl font-bold text-blue-900">Divalaser Software Solutions</h1>
+                <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
               </div>
               
               {/* Georgia Tech Logo */}
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="flex justify-end mt-2">
-              <Button variant="outline" size="sm" onClick={() => logout()}>Logout</Button>
+              <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400" onClick={() => logout()}>Logout</Button>
             </div>
           </div>
         </header>
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="border-b bg-white shadow-sm sticky top-0 z-10">
+      <header className="bg-black shadow-lg sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-8">
             {/* University of Phoenix Logo */}
@@ -168,7 +168,7 @@ export default function AdminDashboard() {
             
             {/* Center Content */}
             <div className="flex-1 text-center">
-              <h1 className="text-2xl font-bold text-blue-900">Divalaser Software Solutions</h1>
+              <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
             </div>
             
             {/* Georgia Tech Logo */}
@@ -181,8 +181,8 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="flex justify-end items-center gap-4 mt-2">
-            <span className="text-sm text-gray-600">Welcome, {user.name}</span>
-            <Button variant="outline" size="sm" onClick={() => logout()}>Logout</Button>
+            <span className="text-sm text-yellow-300">Welcome, {user.name}</span>
+            <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400" onClick={() => logout()}>Logout</Button>
           </div>
         </div>
       </header>

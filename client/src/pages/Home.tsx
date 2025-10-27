@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm">
+      <header className="bg-black shadow-lg">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between gap-8">
             {/* University of Phoenix Logo */}
@@ -19,10 +19,18 @@ export default function Home() {
               />
             </div>
             
-            {/* Center Content */}
-            <div className="flex-1 text-center">
-              <h1 className="text-4xl font-bold text-blue-900 mb-2">Divalaser Software Solutions</h1>
-              <p className="text-gray-600 text-sm">Building Excellence in Digital Solutions</p>
+            {/* Center Content with Promo Photo */}
+            <div className="flex-1 flex flex-col items-center">
+              {/* Promo Photo */}
+              <div className="mb-3">
+                <img 
+                  src="/promo-photo.png" 
+                  alt="Promotional" 
+                  className="h-24 w-24 rounded-full object-cover border-4 border-yellow-400 shadow-lg"
+                />
+              </div>
+              <h1 className="text-4xl font-bold text-yellow-400 mb-2">Divalaser Software Solutions</h1>
+              <p className="text-yellow-300 text-sm">Building Excellence in Digital Solutions</p>
             </div>
             
             {/* Georgia Tech Logo */}
@@ -38,7 +46,7 @@ export default function Home() {
           {/* Admin Login Button */}
           <div className="flex justify-end mt-4">
             <Link href="/admin">
-              <Button variant="outline" size="sm">Admin Login</Button>
+              <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400">Admin Login</Button>
             </Link>
           </div>
         </div>
