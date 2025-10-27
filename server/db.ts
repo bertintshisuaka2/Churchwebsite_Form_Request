@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, churchSubmissions, InsertChurchSubmission, ChurchSubmission } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -109,7 +109,7 @@ export async function getAllChurchSubmissions(): Promise<ChurchSubmission[]> {
     throw new Error("Database not available");
   }
 
-  return await db.select().from(churchSubmissions);
+  return await db.select().from(churchSubmissions).orderBy(desc(churchSubmissions.createdAt));
 }
 
 export async function getChurchSubmissionById(id: number): Promise<ChurchSubmission | undefined> {

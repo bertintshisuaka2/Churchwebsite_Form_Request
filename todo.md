@@ -12,3 +12,7 @@
 
 - [x] Fix email validation error on form submission
 
+
+
+- [x] Fix admin dashboard not displaying submitted forms
+

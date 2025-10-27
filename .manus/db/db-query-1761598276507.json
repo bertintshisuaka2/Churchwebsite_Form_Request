@@ -1,0 +1,43 @@
+{
+  "query": "SELECT * FROM church_submissions ORDER BY created_at DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 1bm1SSQvxoeV96i.50cad2b461e3 --database FFaVd7oDTjAr5NFbS6BbHk --execute SELECT * FROM church_submissions ORDER BY created_at DESC LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "church_name": "QWERTYUI",
+      "denomination": "WERTYUIO",
+      "address": "QWERTYUIO",
+      "city": "WERTYUI",
+      "state": "SDFGHJK",
+      "zip_code": "300700",
+      "country": "United States",
+      "phone": "234567890",
+      "email": "qwertyui@gmail.com",
+      "website": "NULL",
+      "contact_name": "qwertyu",
+      "contact_title": "qwertyui",
+      "contact_phone": "12345678",
+      "contact_email": "qwertyu@hotmail.com",
+      "mission_statement": "qwertyuiopdfghjklcvbnm,.",
+      "vision_statement": "wertyuiopiuytrdefghjkmnbvbn",
+      "statement_of_faith": "wertyuiuytrdefghjkjhbvbnm,",
+      "church_history": "wertyuiuyfdfghjxnbvbnm",
+      "service_times": "12345678",
+      "ministries": "[\"Children's Ministry\",\"Outreach/Missions\",\"Small Groups\"]",
+      "has_existing_website": "0",
+      "existing_website_url": "NULL",
+      "desired_features": "[\"Event Calendar\",\"Live Streaming\"]",
+      "preferred_colors": "wertyuio",
+      "additional_notes": "45r6tyuiol",
+      "budget": "2000",
+      "timeline": "2",
+      "status": "pending",
+      "created_at": "2025-10-27 20:49:03",
+      "updated_at": "2025-10-27 20:49:03"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tchurch_name\tdenomination\taddress\tcity\tstate\tzip_code\tcountry\tphone\temail\twebsite\tcontact_name\tcontact_title\tcontact_phone\tcontact_email\tmission_statement\tvision_statement\tstatement_of_faith\tchurch_history\tservice_times\tministries\thas_existing_website\texisting_website_url\tdesired_features\tpreferred_colors\tadditional_notes\tbudget\ttimeline\tstatus\tcreated_at\tupdated_at\n1\tQWERTYUI\tWERTYUIO\tQWERTYUIO\tWERTYUI\tSDFGHJK\t300700\tUnited States\t234567890\tqwertyui@gmail.com\tNULL\tqwertyu\tqwertyui\t12345678\tqwertyu@hotmail.com\tqwertyuiopdfghjklcvbnm,.\twertyuiopiuytrdefghjkmnbvbn\twertyuiuytrdefghjkjhbvbnm,\twertyuiuyfdfghjxnbvbnm\t12345678\t[\"Children's Ministry\",\"Outreach/Missions\",\"Small Groups\"]\t0\tNULL\t[\"Event Calendar\",\"Live Streaming\"]\twertyuio\t45r6tyuiol\t2000\t2\tpending\t2025-10-27 20:49:03\t2025-10-27 20:49:03\n",
+  "stderr": "",
+  "execution_time_ms": 87
+}
