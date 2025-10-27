@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, churchSubmissions, InsertChurchSubmission, ChurchSubmission } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,45 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Church submission queries
+export async function createChurchSubmission(submission: InsertChurchSubmission): Promise<ChurchSubmission> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.insert(churchSubmissions).values(submission);
+  const insertedId = Number(result[0].insertId);
+  
+  const inserted = await db.select().from(churchSubmissions).where(eq(churchSubmissions.id, insertedId)).limit(1);
+  return inserted[0];
+}
+
+export async function getAllChurchSubmissions(): Promise<ChurchSubmission[]> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return await db.select().from(churchSubmissions);
+}
+
+export async function getChurchSubmissionById(id: number): Promise<ChurchSubmission | undefined> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.select().from(churchSubmissions).where(eq(churchSubmissions.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateChurchSubmissionStatus(id: number, status: "pending" | "in_progress" | "completed" | "cancelled"): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.update(churchSubmissions).set({ status }).where(eq(churchSubmissions.id, id));
+}
+
