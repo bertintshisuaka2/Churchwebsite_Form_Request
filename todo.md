@@ -8,3 +8,7 @@
 - [x] Create admin dashboard to view submissions
 - [x] Test form submission flow
 
+
+
+- [x] Fix email validation error on form submission
+

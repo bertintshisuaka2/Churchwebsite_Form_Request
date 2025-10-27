@@ -32,14 +32,14 @@ export const appRouter = router({
         zipCode: z.string().optional(),
         country: z.string().min(1),
         phone: z.string().min(1),
-        email: z.string().email(),
+        email: z.string().min(1).includes('@'),
         website: z.string().optional(),
         
         // Contact Person
         contactName: z.string().min(1),
         contactTitle: z.string().optional(),
         contactPhone: z.string().min(1),
-        contactEmail: z.string().email(),
+        contactEmail: z.string().min(1).includes('@'),
         
         // Church Details
         missionStatement: z.string().optional(),
