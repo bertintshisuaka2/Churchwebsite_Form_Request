@@ -7,15 +7,40 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Church className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">{APP_TITLE}</h1>
+      <header className="border-b bg-white shadow-sm">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between gap-8">
+            {/* University of Phoenix Logo */}
+            <div className="flex-shrink-0">
+              <img 
+                src="/university-of-phoenix-logo.png" 
+                alt="University of Phoenix" 
+                className="h-16 w-auto object-contain"
+              />
+            </div>
+            
+            {/* Center Content */}
+            <div className="flex-1 text-center">
+              <h1 className="text-4xl font-bold text-blue-900 mb-2">Divalaser Software Solutions</h1>
+              <p className="text-gray-600 text-sm">Building Excellence in Digital Solutions</p>
+            </div>
+            
+            {/* Georgia Tech Logo */}
+            <div className="flex-shrink-0">
+              <img 
+                src="/georgia-tech-logo.png" 
+                alt="Georgia Tech" 
+                className="h-16 w-auto object-contain"
+              />
+            </div>
           </div>
-          <Link href="/admin">
-            <Button variant="outline">Admin Login</Button>
-          </Link>
+          
+          {/* Admin Login Button */}
+          <div className="flex justify-end mt-4">
+            <Link href="/admin">
+              <Button variant="outline" size="sm">Admin Login</Button>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -31,7 +56,16 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="pt-4">
+          {/* Team Photo */}
+          <div className="pt-8">
+            <img 
+              src="/team-photo.jpg" 
+              alt="Divalaser Software Solutions Team" 
+              className="rounded-lg shadow-xl mx-auto max-w-2xl w-full object-cover"
+            />
+          </div>
+
+          <div className="pt-8">
             <Link href="/submit">
               <Button size="lg" className="text-lg px-8 py-6">
                 Get Started - Request Your Website
@@ -132,7 +166,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t bg-gray-50 mt-24">
         <div className="container mx-auto px-4 py-8 text-center text-gray-600">
-          <p>&copy; 2025 {APP_TITLE}. All rights reserved.</p>
+          <p>&copy; 2025 Divalaser Software Solutions. All rights reserved.</p>
         </div>
       </footer>
     </div>

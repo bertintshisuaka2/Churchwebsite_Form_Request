@@ -16,3 +16,11 @@
 
 - [x] Fix admin dashboard not displaying submitted forms
 
+
+
+- [x] Debug admin dashboard access issue
+- [x] Update header with Divalaser Software Solutions branding
+- [x] Add University of Phoenix logo on left side
+- [x] Add Georgia Tech logo on right side
+- [x] Add company photo in the middle
+
