@@ -34,3 +34,7 @@
 
 - [x] Fix admin login redirect to properly send users to admin dashboard after login
 
+
+
+- [x] Change home page background to blue sky clear color
+
