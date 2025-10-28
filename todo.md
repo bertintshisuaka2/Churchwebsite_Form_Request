@@ -38,3 +38,7 @@
 
 - [x] Change home page background to blue sky clear color
 
+
+
+- [x] Update hero text to include Matthew 24:14 and change "community" to "all the world"
+

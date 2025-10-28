@@ -55,12 +55,15 @@ export default function Home() {
       {/* Hero Section */}
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <div className="space-y-4">
-            <h2 className="text-5xl font-bold text-gray-900 leading-tight">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Build Your Church's Digital Presence
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Let us help you create a beautiful, functional website that serves your congregation and reaches your community.
+            <p className="text-xl text-gray-700 mb-2">
+              <span className="font-semibold italic">"Matthew 24:14"</span>
+            </p>
+            <p className="text-xl text-gray-700 mb-8">
+              Let us help you create a beautiful, functional website that serves your congregation and reaches all the world.
             </p>
           </div>
 
