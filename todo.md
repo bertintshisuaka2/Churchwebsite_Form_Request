@@ -58,3 +58,9 @@
 - [x] Add ability to restore submissions from trash
 - [x] Add ability to permanently delete submissions from trash
 
+
+
+- [x] Add PIN authentication for administrator dashboard (PIN: 3495)
+- [x] Create PIN entry dialog before accessing admin panel
+- [x] Store PIN verification in session/local storage
+

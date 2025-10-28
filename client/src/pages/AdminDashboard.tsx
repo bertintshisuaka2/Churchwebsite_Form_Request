@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import { APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Church, Loader2, ExternalLink, Trash2 } from "lucide-react";
@@ -22,9 +23,44 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+
+const ADMIN_PIN = "3495";
+const PIN_STORAGE_KEY = "admin_pin_verified";
 
 export default function AdminDashboard() {
   const { user, loading, isAuthenticated, logout } = useAuth();
+  const [pinVerified, setPinVerified] = useState(false);
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState("");
+
+  useEffect(() => {
+    // Check if PIN was previously verified in this session
+    const verified = sessionStorage.getItem(PIN_STORAGE_KEY);
+    if (verified === "true") {
+      setPinVerified(true);
+    }
+  }, []);
+
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pinInput === ADMIN_PIN) {
+      setPinVerified(true);
+      sessionStorage.setItem(PIN_STORAGE_KEY, "true");
+      setPinError("");
+      toast.success("PIN verified successfully");
+    } else {
+      setPinError("Incorrect PIN. Please try again.");
+      setPinInput("");
+    }
+  };
   const { data: submissions, isLoading, refetch } = trpc.submissions.list.useQuery(undefined, {
     enabled: isAuthenticated && user?.role === 'admin',
   });
@@ -188,7 +224,42 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <>
+      {/* PIN Verification Dialog */}
+      <Dialog open={!pinVerified} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
+          <DialogHeader>
+            <DialogTitle>Administrator PIN Required</DialogTitle>
+            <DialogDescription>
+              Please enter the administrator PIN to access the dashboard.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handlePinSubmit} className="space-y-4">
+            <div>
+              <Input
+                type="password"
+                placeholder="Enter PIN"
+                value={pinInput}
+                onChange={(e) => {
+                  setPinInput(e.target.value);
+                  setPinError("");
+                }}
+                maxLength={4}
+                className="text-center text-2xl tracking-widest"
+                autoFocus
+              />
+              {pinError && (
+                <p className="text-sm text-red-600 mt-2">{pinError}</p>
+              )}
+            </div>
+            <Button type="submit" className="w-full" disabled={pinInput.length !== 4}>
+              Verify PIN
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <header className="bg-black shadow-lg sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-8">
@@ -415,6 +486,7 @@ export default function AdminDashboard() {
         </Tabs>
       </main>
     </div>
+    </>
   );
 }
 
