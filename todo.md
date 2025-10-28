@@ -74,3 +74,7 @@
 - [x] Translate Admin Dashboard
 - [x] Store language preference in localStorage)
 
+
+
+- [x] Create comprehensive README.md file for GitHub repository
+
