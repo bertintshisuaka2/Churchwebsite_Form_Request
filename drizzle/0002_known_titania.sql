@@ -1,0 +1,1 @@
+ALTER TABLE `church_submissions` ADD `deleted_at` timestamp;

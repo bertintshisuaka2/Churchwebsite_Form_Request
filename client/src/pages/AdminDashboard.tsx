@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
-import { Church, Loader2, ExternalLink } from "lucide-react";
+import { Church, Loader2, ExternalLink, Trash2 } from "lucide-react";
 import { Link } from "wouter";
 import {
   Table,
@@ -21,10 +21,14 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminDashboard() {
   const { user, loading, isAuthenticated, logout } = useAuth();
   const { data: submissions, isLoading, refetch } = trpc.submissions.list.useQuery(undefined, {
+    enabled: isAuthenticated && user?.role === 'admin',
+  });
+  const { data: trashedSubmissions, isLoading: isLoadingTrashed, refetch: refetchTrashed } = trpc.submissions.listTrashed.useQuery(undefined, {
     enabled: isAuthenticated && user?.role === 'admin',
   });
 
@@ -35,6 +39,37 @@ export default function AdminDashboard() {
     },
     onError: (error) => {
       toast.error("Failed to update status: " + error.message);
+    },
+  });
+
+  const deleteSubmission = trpc.submissions.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Submission moved to trash");
+      refetch();
+    },
+    onError: (error) => {
+      toast.error("Failed to delete: " + error.message);
+    },
+  });
+
+  const restoreSubmission = trpc.submissions.restore.useMutation({
+    onSuccess: () => {
+      toast.success("Submission restored");
+      refetch();
+      refetchTrashed();
+    },
+    onError: (error) => {
+      toast.error("Failed to restore: " + error.message);
+    },
+  });
+
+  const permanentlyDelete = trpc.submissions.permanentlyDelete.useMutation({
+    onSuccess: () => {
+      toast.success("Submission permanently deleted");
+      refetchTrashed();
+    },
+    onError: (error) => {
+      toast.error("Failed to permanently delete: " + error.message);
     },
   });
 
@@ -201,83 +236,183 @@ export default function AdminDashboard() {
           </Link>
         </div>
 
-        {isLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          </div>
-        ) : submissions && submissions.length > 0 ? (
-          <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Church Name</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {submissions.map((submission) => (
-                  <TableRow key={submission.id}>
-                    <TableCell className="font-medium">
-                      <div>
-                        <div>{submission.churchName}</div>
-                        {submission.denomination && (
-                          <div className="text-sm text-gray-500">{submission.denomination}</div>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <div>{submission.contactName}</div>
-                        <div className="text-gray-500">{submission.contactEmail}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        {submission.city}, {submission.state || submission.country}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        {new Date(submission.createdAt).toLocaleDateString()}
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(submission.status)}</TableCell>
-                    <TableCell>
-                      <Select
-                        value={submission.status}
-                        onValueChange={(value) => {
-                          updateStatus.mutate({
-                            id: submission.id,
-                            status: value as "pending" | "in_progress" | "completed" | "cancelled",
-                          });
-                        }}
-                      >
-                        <SelectTrigger className="w-[140px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="pending">Pending</SelectItem>
-                          <SelectItem value="in_progress">In Progress</SelectItem>
-                          <SelectItem value="completed">Completed</SelectItem>
-                          <SelectItem value="cancelled">Cancelled</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg shadow-md border border-gray-100 p-16 text-center">
-            <p className="text-gray-600 text-lg">No submissions yet</p>
-            <p className="text-gray-500 mt-2">New website requests will appear here</p>
-          </div>
-        )}
+        <Tabs defaultValue="active" className="w-full">
+          <TabsList className="mb-4">
+            <TabsTrigger value="active">Active Submissions</TabsTrigger>
+            <TabsTrigger value="trash">Trash ({trashedSubmissions?.length || 0})</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="active">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              </div>
+            ) : submissions && submissions.length > 0 ? (
+              <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Church Name</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Submitted</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {submissions.map((submission) => (
+                      <TableRow key={submission.id}>
+                        <TableCell className="font-medium">
+                          <div>
+                            <div>{submission.churchName}</div>
+                            {submission.denomination && (
+                              <div className="text-sm text-gray-500">{submission.denomination}</div>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            <div>{submission.contactName}</div>
+                            <div className="text-gray-500">{submission.contactEmail}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            {submission.city}, {submission.state || submission.country}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            {new Date(submission.createdAt).toLocaleDateString()}
+                          </div>
+                        </TableCell>
+                        <TableCell>{getStatusBadge(submission.status)}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Select
+                              value={submission.status}
+                              onValueChange={(value) => {
+                                updateStatus.mutate({
+                                  id: submission.id,
+                                  status: value as "pending" | "in_progress" | "completed" | "cancelled",
+                                });
+                              }}
+                            >
+                              <SelectTrigger className="w-[140px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="in_progress">In Progress</SelectItem>
+                                <SelectItem value="completed">Completed</SelectItem>
+                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => deleteSubmission.mutate({ id: submission.id })}
+                              disabled={deleteSubmission.isPending}
+                            >
+                              <Trash2 className="h-4 w-4 text-red-600" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow-md border border-gray-100 p-16 text-center">
+                <p className="text-gray-600 text-lg">No submissions yet</p>
+                <p className="text-gray-500 mt-2">New website requests will appear here</p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="trash">
+            {isLoadingTrashed ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              </div>
+            ) : trashedSubmissions && trashedSubmissions.length > 0 ? (
+              <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Church Name</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Deleted</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {trashedSubmissions.map((submission) => (
+                      <TableRow key={submission.id} className="opacity-60">
+                        <TableCell className="font-medium">
+                          <div>
+                            <div>{submission.churchName}</div>
+                            {submission.denomination && (
+                              <div className="text-sm text-gray-500">{submission.denomination}</div>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            <div>{submission.contactName}</div>
+                            <div className="text-gray-500">{submission.contactEmail}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            {submission.city}, {submission.state || submission.country}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            {submission.deletedAt ? new Date(submission.deletedAt).toLocaleDateString() : 'N/A'}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => restoreSubmission.mutate({ id: submission.id })}
+                              disabled={restoreSubmission.isPending}
+                            >
+                              Restore
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => {
+                                if (confirm('Are you sure you want to permanently delete this submission? This action cannot be undone.')) {
+                                  permanentlyDelete.mutate({ id: submission.id });
+                                }
+                              }}
+                              disabled={permanentlyDelete.isPending}
+                            >
+                              Delete Forever
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow-md border border-gray-100 p-16 text-center">
+                <p className="text-gray-600 text-lg">Trash is empty</p>
+                <p className="text-gray-500 mt-2">Deleted submissions will appear here</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );

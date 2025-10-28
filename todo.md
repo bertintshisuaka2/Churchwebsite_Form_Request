@@ -50,3 +50,11 @@
 
 - [x] Change "reaches all the world" to "reaches the ends of the earth"
 
+
+
+- [x] Add delete button to each submission row in admin dashboard
+- [x] Create trash/archive system for deleted submissions
+- [x] Add ability to view trashed submissions
+- [x] Add ability to restore submissions from trash
+- [x] Add ability to permanently delete submissions from trash
+

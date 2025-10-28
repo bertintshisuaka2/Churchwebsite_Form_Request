@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { createChurchSubmission, getAllChurchSubmissions, getChurchSubmissionById, updateChurchSubmissionStatus } from "./db";
+import { createChurchSubmission, getAllChurchSubmissions, getChurchSubmissionById, updateChurchSubmissionStatus, getTrashedChurchSubmissions, softDeleteChurchSubmission, restoreChurchSubmission, permanentlyDeleteChurchSubmission } from "./db";
 import { notifyOwner } from "./_core/notification";
 
 export const appRouter = router({
@@ -127,6 +127,53 @@ export const appRouter = router({
         }
 
         await updateChurchSubmissionStatus(input.id, input.status);
+        return { success: true };
+      }),
+
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== 'admin') {
+          throw new Error('Unauthorized');
+        }
+
+        await softDeleteChurchSubmission(input.id);
+        return { success: true };
+      }),
+
+    listTrashed: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new Error('Unauthorized');
+      }
+      
+      const submissions = await getTrashedChurchSubmissions();
+      
+      return submissions.map(s => ({
+        ...s,
+        ministries: s.ministries ? JSON.parse(s.ministries) : [],
+        desiredFeatures: s.desiredFeatures ? JSON.parse(s.desiredFeatures) : [],
+      }));
+    }),
+
+    restore: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== 'admin') {
+          throw new Error('Unauthorized');
+        }
+
+        await restoreChurchSubmission(input.id);
+        return { success: true };
+      }),
+
+    permanentlyDelete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== 'admin') {
+          throw new Error('Unauthorized');
+        }
+
+        await permanentlyDeleteChurchSubmission(input.id);
         return { success: true };
       }),
   }),

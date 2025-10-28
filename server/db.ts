@@ -1,4 +1,4 @@
-import { eq, desc } from "drizzle-orm";
+import { eq, isNull, isNotNull, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, churchSubmissions, InsertChurchSubmission, ChurchSubmission } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -109,7 +109,52 @@ export async function getAllChurchSubmissions(): Promise<ChurchSubmission[]> {
     throw new Error("Database not available");
   }
 
-  return await db.select().from(churchSubmissions).orderBy(desc(churchSubmissions.createdAt));
+  return await db.select().from(churchSubmissions)
+    .where(isNull(churchSubmissions.deletedAt))
+    .orderBy(desc(churchSubmissions.createdAt));
+}
+
+export async function getTrashedChurchSubmissions(): Promise<ChurchSubmission[]> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return await db.select().from(churchSubmissions)
+    .where(isNotNull(churchSubmissions.deletedAt))
+    .orderBy(desc(churchSubmissions.deletedAt));
+}
+
+export async function softDeleteChurchSubmission(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.update(churchSubmissions)
+    .set({ deletedAt: new Date() })
+    .where(eq(churchSubmissions.id, id));
+}
+
+export async function restoreChurchSubmission(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.update(churchSubmissions)
+    .set({ deletedAt: null })
+    .where(eq(churchSubmissions.id, id));
+}
+
+export async function permanentlyDeleteChurchSubmission(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.delete(churchSubmissions)
+    .where(eq(churchSubmissions.id, id));
 }
 
 export async function getChurchSubmissionById(id: number): Promise<ChurchSubmission | undefined> {
