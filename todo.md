@@ -69,8 +69,8 @@
 - [x] Add language switcher (English/French)
 - [x] Create translation system with language context
 - [x] Translate Home page
-- [ ] Translate Form page (in progress - basic fields done, need to complete remaining sections)
+- [x] Translate Form page
 - [x] Translate Success page
 - [x] Translate Admin Dashboard
-- [x] Store language preference in localStorage
+- [x] Store language preference in localStorage)
 

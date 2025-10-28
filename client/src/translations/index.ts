@@ -82,9 +82,10 @@ export const translations = {
     counseling: "Counseling",
     
     websiteRequirements: "Website Requirements",
-    hasExistingWebsite: "Do you have an existing website?",
+    hasExistingWebsite: "We have an existing website that needs to be redesigned",
     existingWebsiteUrl: "Current Website URL",
     desiredFeatures: "Desired Features",
+    desiredFeaturesDesc: "Select the features you'd like on your website:",
     onlineGiving: "Online Giving",
     eventCalendar: "Event Calendar",
     blog: "Blog/News Section",
@@ -106,6 +107,7 @@ export const translations = {
     budget5: "Over $10,000",
     
     timeline: "Desired Timeline",
+    submitRequest: "Submit Request",
     timeline1: "1-2 months",
     timeline2: "3-4 months",
     timeline3: "5-6 months",
@@ -256,9 +258,10 @@ export const translations = {
     counseling: "Counseling",
     
     websiteRequirements: "Exigences du Site Web",
-    hasExistingWebsite: "Avez-vous un site web existant?",
+    hasExistingWebsite: "Nous avons un site web existant qui doit être repensé",
     existingWebsiteUrl: "URL du Site Web Actuel",
     desiredFeatures: "Fonctionnalités Souhaitées",
+    desiredFeaturesDesc: "Sélectionnez les fonctionnalités que vous souhaitez sur votre site web:",
     onlineGiving: "Dons en Ligne",
     eventCalendar: "Calendrier d'Événements",
     blog: "Section Blog/Nouvelles",
@@ -280,6 +283,7 @@ export const translations = {
     budget5: "Plus de 10 000 $",
     
     timeline: "Calendrier Souhaité",
+    submitRequest: "Soumettre la Demande",
     timeline1: "1-2 mois",
     timeline2: "3-4 mois",
     timeline3: "5-6 mois",

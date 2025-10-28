@@ -178,47 +178,47 @@ export default function SubmissionForm() {
 
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="country">Country *</Label>
+                  <Label htmlFor="country">{t('country')} *</Label>
                   <Input id="country" name="country" required defaultValue="United States" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Church Phone *</Label>
+                  <Label htmlFor="phone">{t('phone')} *</Label>
                   <Input id="phone" name="phone" type="tel" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Church Email *</Label>
+                  <Label htmlFor="email">{t('email')} *</Label>
                   <Input id="email" name="email" type="email" required />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="website">Current Website (if any)</Label>
+                <Label htmlFor="website">{t('website')}</Label>
                 <Input id="website" name="website" type="url" placeholder="https://" />
               </div>
             </section>
 
             {/* Contact Person */}
             <section className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">Primary Contact</h3>
+              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">{t('contactPerson')}</h3>
               
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="contactName">Contact Name *</Label>
+                  <Label htmlFor="contactName">{t('contactName')} *</Label>
                   <Input id="contactName" name="contactName" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="contactTitle">Title/Position</Label>
+                  <Label htmlFor="contactTitle">{t('contactTitle')}</Label>
                   <Input id="contactTitle" name="contactTitle" placeholder="e.g., Pastor, Administrator" />
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="contactPhone">Contact Phone *</Label>
+                  <Label htmlFor="contactPhone">{t('contactPhone')} *</Label>
                   <Input id="contactPhone" name="contactPhone" type="tel" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="contactEmail">Contact Email *</Label>
+                  <Label htmlFor="contactEmail">{t('contactEmail')} *</Label>
                   <Input id="contactEmail" name="contactEmail" type="email" required />
                 </div>
               </div>
@@ -226,38 +226,38 @@ export default function SubmissionForm() {
 
             {/* Church Details */}
             <section className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">About Your Church</h3>
+              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">{t('churchDetails')}</h3>
               
               <div className="space-y-2">
-                <Label htmlFor="missionStatement">Mission Statement</Label>
+                <Label htmlFor="missionStatement">{t('missionStatement')}</Label>
                 <Textarea id="missionStatement" name="missionStatement" rows={3} />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="visionStatement">Vision Statement</Label>
+                <Label htmlFor="visionStatement">{t('visionStatement')}</Label>
                 <Textarea id="visionStatement" name="visionStatement" rows={3} />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="statementOfFaith">Statement of Faith</Label>
+                <Label htmlFor="statementOfFaith">{t('statementOfFaith')}</Label>
                 <Textarea id="statementOfFaith" name="statementOfFaith" rows={4} />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="churchHistory">Church History</Label>
+                <Label htmlFor="churchHistory">{t('churchHistory')}</Label>
                 <Textarea id="churchHistory" name="churchHistory" rows={4} placeholder="Tell us about your church's founding and journey..." />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="serviceTimes">Service Times</Label>
+                <Label htmlFor="serviceTimes">{t('serviceTimes')}</Label>
                 <Textarea id="serviceTimes" name="serviceTimes" rows={2} placeholder="e.g., Sunday 9:00 AM & 11:00 AM, Wednesday 7:00 PM" />
               </div>
             </section>
 
             {/* Ministries */}
             <section className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">Ministries</h3>
-              <p className="text-sm text-gray-600">Select the ministries your church offers:</p>
+              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">{t('ministries')}</h3>
+              <p className="text-sm text-gray-600">{t('ministriesDesc')}</p>
               
               <div className="grid md:grid-cols-2 gap-3">
                 {ministryOptions.map((ministry) => (
@@ -283,7 +283,7 @@ export default function SubmissionForm() {
 
             {/* Website Requirements */}
             <section className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">Website Requirements</h3>
+              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">{t('websiteRequirements')}</h3>
               
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -292,20 +292,20 @@ export default function SubmissionForm() {
                   onCheckedChange={(checked) => setHasExistingWebsite(checked as boolean)}
                 />
                 <Label htmlFor="hasExistingWebsite" className="font-normal cursor-pointer">
-                  We have an existing website that needs to be redesigned
+                  {t('hasExistingWebsite')}
                 </Label>
               </div>
 
               {hasExistingWebsite && (
                 <div className="space-y-2">
-                  <Label htmlFor="existingWebsiteUrl">Existing Website URL</Label>
+                  <Label htmlFor="existingWebsiteUrl">{t('existingWebsiteUrl')}</Label>
                   <Input id="existingWebsiteUrl" name="existingWebsiteUrl" type="url" placeholder="https://" />
                 </div>
               )}
 
               <div className="space-y-2">
-                <Label>Desired Features</Label>
-                <p className="text-sm text-gray-600 mb-2">Select the features you'd like on your website:</p>
+                <Label>{t('desiredFeatures')}</Label>
+                <p className="text-sm text-gray-600 mb-2">{t('desiredFeaturesDesc')}</p>
                 <div className="grid md:grid-cols-2 gap-3">
                   {featureOptions.map((feature) => (
                     <div key={feature} className="flex items-center space-x-2">
@@ -329,27 +329,27 @@ export default function SubmissionForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="preferredColors">Preferred Colors/Branding</Label>
+                <Label htmlFor="preferredColors">{t('preferredColors')}</Label>
                 <Input id="preferredColors" name="preferredColors" placeholder="e.g., Blue and white, warm earth tones" />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="additionalNotes">Additional Notes or Special Requirements</Label>
+                <Label htmlFor="additionalNotes">{t('additionalNotes')}</Label>
                 <Textarea id="additionalNotes" name="additionalNotes" rows={4} />
               </div>
             </section>
 
             {/* Budget and Timeline */}
             <section className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">Budget & Timeline</h3>
+              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">{t('budgetTimeline')}</h3>
               
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="budget">Budget Range</Label>
+                  <Label htmlFor="budget">{t('budget')}</Label>
                   <Input id="budget" name="budget" placeholder="e.g., $2,000 - $5,000" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="timeline">Desired Timeline</Label>
+                  <Label htmlFor="timeline">{t('timeline')}</Label>
                   <Input id="timeline" name="timeline" placeholder="e.g., 2-3 months" />
                 </div>
               </div>
@@ -358,7 +358,7 @@ export default function SubmissionForm() {
             <div className="pt-6 border-t">
               <Button type="submit" size="lg" className="w-full" disabled={createSubmission.isPending}>
                 {createSubmission.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Submit Request
+                {t('submitRequest')}
               </Button>
             </div>
           </form>
