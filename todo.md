@@ -42,3 +42,7 @@
 
 - [x] Update hero text to include Matthew 24:14 and change "community" to "all the world"
 
+
+
+- [x] Add full Matthew 24:14 NKJV verse text to hero section
+

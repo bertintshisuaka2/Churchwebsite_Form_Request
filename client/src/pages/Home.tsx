@@ -59,9 +59,12 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Build Your Church's Digital Presence
             </h2>
-            <p className="text-xl text-gray-700 mb-2">
-              <span className="font-semibold italic">"Matthew 24:14"</span>
-            </p>
+            <div className="mb-6 p-4 bg-white/80 rounded-lg shadow-sm">
+              <p className="text-lg font-semibold text-gray-800 mb-2">Matthew 24:14 (NKJV)</p>
+              <p className="text-lg italic text-gray-700">
+                "And this gospel of the kingdom will be preached in all the world as a witness to all the nations, and then the end will come."
+              </p>
+            </div>
             <p className="text-xl text-gray-700 mb-8">
               Let us help you create a beautiful, functional website that serves your congregation and reaches all the world.
             </p>
