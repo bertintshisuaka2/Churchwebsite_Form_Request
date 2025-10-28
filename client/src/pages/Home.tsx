@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { APP_TITLE } from "@/const";
+import { APP_TITLE, getLoginUrl } from "@/const";
 import { Church, FileText, Users, Palette } from "lucide-react";
 import { Link } from "wouter";
 
@@ -45,9 +45,9 @@ export default function Home() {
           
           {/* Admin Login Button */}
           <div className="flex justify-end mt-4">
-            <Link href="/admin">
+            <a href={getLoginUrl("/admin")}>
               <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400">Admin Login</Button>
-            </Link>
+            </a>
           </div>
         </div>
       </header>

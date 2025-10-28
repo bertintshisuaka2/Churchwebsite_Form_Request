@@ -30,3 +30,7 @@
 - [x] Change header text to yellow
 - [x] Add promotional photo in top middle of header
 
+
+
+- [x] Fix admin login redirect to properly send users to admin dashboard after login
+
