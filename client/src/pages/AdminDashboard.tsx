@@ -1,6 +1,8 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { APP_TITLE, getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Church, Loader2, ExternalLink, Trash2 } from "lucide-react";
@@ -37,6 +39,7 @@ const PIN_STORAGE_KEY = "admin_pin_verified";
 
 export default function AdminDashboard() {
   const { user, loading, isAuthenticated, logout } = useAuth();
+  const { t } = useLanguage();
   const [pinVerified, setPinVerified] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
@@ -55,9 +58,9 @@ export default function AdminDashboard() {
       setPinVerified(true);
       sessionStorage.setItem(PIN_STORAGE_KEY, "true");
       setPinError("");
-      toast.success("PIN verified successfully");
+      toast.success(t('pinVerified'));
     } else {
-      setPinError("Incorrect PIN. Please try again.");
+      setPinError(t('incorrectPin'));
       setPinInput("");
     }
   };
@@ -70,7 +73,7 @@ export default function AdminDashboard() {
 
   const updateStatus = trpc.submissions.updateStatus.useMutation({
     onSuccess: () => {
-      toast.success("Status updated successfully");
+      toast.success(t('statusUpdated'));
       refetch();
     },
     onError: (error) => {
@@ -80,7 +83,7 @@ export default function AdminDashboard() {
 
   const deleteSubmission = trpc.submissions.delete.useMutation({
     onSuccess: () => {
-      toast.success("Submission moved to trash");
+      toast.success(t('movedToTrash'));
       refetch();
     },
     onError: (error) => {
@@ -90,7 +93,7 @@ export default function AdminDashboard() {
 
   const restoreSubmission = trpc.submissions.restore.useMutation({
     onSuccess: () => {
-      toast.success("Submission restored");
+      toast.success(t('restored'));
       refetch();
       refetchTrashed();
     },
@@ -101,7 +104,7 @@ export default function AdminDashboard() {
 
   const permanentlyDelete = trpc.submissions.permanentlyDelete.useMutation({
     onSuccess: () => {
-      toast.success("Submission permanently deleted");
+      toast.success(t('permanentlyDeleted'));
       refetchTrashed();
     },
     onError: (error) => {
@@ -134,7 +137,7 @@ export default function AdminDashboard() {
               
               {/* Center Content */}
               <div className="flex-1 text-center">
-                <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
+                <h1 className="text-2xl font-bold text-yellow-400">{t('companyName')}</h1>
               </div>
               
               {/* Georgia Tech Logo */}
@@ -182,7 +185,7 @@ export default function AdminDashboard() {
               
               {/* Center Content */}
               <div className="flex-1 text-center">
-                <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
+                <h1 className="text-2xl font-bold text-yellow-400">{t('companyName')}</h1>
               </div>
               
               {/* Georgia Tech Logo */}
@@ -229,16 +232,16 @@ export default function AdminDashboard() {
       <Dialog open={!pinVerified} onOpenChange={() => {}}>
         <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
           <DialogHeader>
-            <DialogTitle>Administrator PIN Required</DialogTitle>
+            <DialogTitle>{t('pinTitle')}</DialogTitle>
             <DialogDescription>
-              Please enter the administrator PIN to access the dashboard.
+              {t('pinDescription')}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handlePinSubmit} className="space-y-4">
             <div>
               <Input
                 type="password"
-                placeholder="Enter PIN"
+                placeholder={t('enterPin')}
                 value={pinInput}
                 onChange={(e) => {
                   setPinInput(e.target.value);
@@ -253,7 +256,7 @@ export default function AdminDashboard() {
               )}
             </div>
             <Button type="submit" className="w-full" disabled={pinInput.length !== 4}>
-              Verify PIN
+              {t('verifyPin')}
             </Button>
           </form>
         </DialogContent>
@@ -274,7 +277,7 @@ export default function AdminDashboard() {
             
             {/* Center Content */}
             <div className="flex-1 text-center">
-              <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
+              <h1 className="text-2xl font-bold text-yellow-400">{t('companyName')}</h1>
             </div>
             
             {/* Georgia Tech Logo */}
@@ -287,8 +290,9 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="flex justify-end items-center gap-4 mt-2">
-            <span className="text-sm text-yellow-300">Welcome, {user.name}</span>
-            <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400" onClick={() => logout()}>Logout</Button>
+            <LanguageSwitcher />
+            <span className="text-sm text-yellow-300">{t('welcome')}, {user.name}</span>
+            <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400" onClick={() => logout()}>{t('logout')}</Button>
           </div>
         </div>
       </header>
@@ -296,21 +300,21 @@ export default function AdminDashboard() {
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Church Website Submissions</h2>
-            <p className="text-gray-600 mt-1">Manage and track all website requests</p>
+            <h2 className="text-3xl font-bold text-gray-900">{t('churchWebsiteSubmissions')}</h2>
+            <p className="text-gray-600 mt-1">{t('manageTrack')}</p>
           </div>
           <Link href="/">
             <Button variant="outline">
               <ExternalLink className="h-4 w-4 mr-2" />
-              View Public Site
+              {t('viewPublicSite')}
             </Button>
           </Link>
         </div>
 
         <Tabs defaultValue="active" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="active">Active Submissions</TabsTrigger>
-            <TabsTrigger value="trash">Trash ({trashedSubmissions?.length || 0})</TabsTrigger>
+            <TabsTrigger value="active">{t('activeSubmissions')}</TabsTrigger>
+            <TabsTrigger value="trash">{t('trash')} ({trashedSubmissions?.length || 0})</TabsTrigger>
           </TabsList>
 
           <TabsContent value="active">
@@ -323,12 +327,12 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Church Name</TableHead>
-                      <TableHead>Contact</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Submitted</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>{t('churchName')}</TableHead>
+                      <TableHead>{t('contact')}</TableHead>
+                      <TableHead>{t('location')}</TableHead>
+                      <TableHead>{t('submitted')}</TableHead>
+                      <TableHead>{t('status')}</TableHead>
+                      <TableHead>{t('actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -374,10 +378,10 @@ export default function AdminDashboard() {
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="in_progress">In Progress</SelectItem>
-                                <SelectItem value="completed">Completed</SelectItem>
-                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                                <SelectItem value="pending">{t('pending')}</SelectItem>
+                                <SelectItem value="in_progress">{t('inProgress')}</SelectItem>
+                                <SelectItem value="completed">{t('completed')}</SelectItem>
+                                <SelectItem value="cancelled">{t('cancelled')}</SelectItem>
                               </SelectContent>
                             </Select>
                             <Button
@@ -397,8 +401,8 @@ export default function AdminDashboard() {
               </div>
             ) : (
               <div className="bg-white rounded-lg shadow-md border border-gray-100 p-16 text-center">
-                <p className="text-gray-600 text-lg">No submissions yet</p>
-                <p className="text-gray-500 mt-2">New website requests will appear here</p>
+                <p className="text-gray-600 text-lg">{t('noSubmissions')}</p>
+                <p className="text-gray-500 mt-2">{t('newRequests')}</p>
               </div>
             )}
           </TabsContent>
@@ -413,11 +417,11 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Church Name</TableHead>
-                      <TableHead>Contact</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Deleted</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>{t('churchName')}</TableHead>
+                      <TableHead>{t('contact')}</TableHead>
+                      <TableHead>{t('location')}</TableHead>
+                      <TableHead>{t('deleted')}</TableHead>
+                      <TableHead>{t('actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -455,7 +459,7 @@ export default function AdminDashboard() {
                               onClick={() => restoreSubmission.mutate({ id: submission.id })}
                               disabled={restoreSubmission.isPending}
                             >
-                              Restore
+                              {t('restore')}
                             </Button>
                             <Button
                               variant="destructive"
@@ -467,7 +471,7 @@ export default function AdminDashboard() {
                               }}
                               disabled={permanentlyDelete.isPending}
                             >
-                              Delete Forever
+                              {t('deleteForever')}
                             </Button>
                           </div>
                         </TableCell>
@@ -478,8 +482,8 @@ export default function AdminDashboard() {
               </div>
             ) : (
               <div className="bg-white rounded-lg shadow-md border border-gray-100 p-16 text-center">
-                <p className="text-gray-600 text-lg">Trash is empty</p>
-                <p className="text-gray-500 mt-2">Deleted submissions will appear here</p>
+                <p className="text-gray-600 text-lg">{t('trashEmpty')}</p>
+                <p className="text-gray-500 mt-2">{t('deletedSubmissions')}</p>
               </div>
             )}
           </TabsContent>

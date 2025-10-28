@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { APP_TITLE } from "@/const";
 import { CheckCircle, Church } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Link } from "wouter";
 
 export default function SubmissionSuccess() {
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
@@ -21,7 +25,7 @@ export default function SubmissionSuccess() {
             
             {/* Center Content */}
             <div className="flex-1 text-center">
-              <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
+              <h1 className="text-2xl font-bold text-yellow-400">{t('companyName')}</h1>
             </div>
             
             {/* Georgia Tech Logo */}
@@ -45,33 +49,33 @@ export default function SubmissionSuccess() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-4xl font-bold text-gray-900">Thank You!</h2>
+            <h2 className="text-4xl font-bold text-gray-900">{t('successTitle')}</h2>
             <p className="text-xl text-gray-600">
-              Your church website request has been successfully submitted.
+              {t('successMessage')}
             </p>
           </div>
 
           <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 text-left space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">What Happens Next?</h3>
+            <h3 className="text-xl font-semibold text-gray-900">{t('nextSteps')}</h3>
             <div className="space-y-3 text-gray-700">
               <p className="flex items-start gap-3">
                 <span className="text-blue-600 font-bold mt-1">1.</span>
-                <span>Our team will review your submission within 1-2 business days.</span>
+                <span>{t('step1')}</span>
               </p>
               <p className="flex items-start gap-3">
                 <span className="text-blue-600 font-bold mt-1">2.</span>
-                <span>We'll reach out to discuss your requirements in more detail and provide a quote.</span>
+                <span>{t('step2')}</span>
               </p>
               <p className="flex items-start gap-3">
                 <span className="text-blue-600 font-bold mt-1">3.</span>
-                <span>Once approved, we'll begin designing your custom church website.</span>
+                <span>{t('step3')}</span>
               </p>
             </div>
           </div>
 
           <div className="pt-4">
             <Link href="/">
-              <Button size="lg">Return to Home</Button>
+              <Button size="lg">{t('backToHome')}</Button>
             </Link>
           </div>
 

@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,6 +13,7 @@ import { toast } from "sonner";
 import { APP_TITLE } from "@/const";
 
 export default function SubmissionForm() {
+  const { t } = useLanguage();
   const [, setLocation] = useLocation();
   const [ministries, setMinistries] = useState<string[]>([]);
   const [desiredFeatures, setDesiredFeatures] = useState<string[]>([]);
@@ -113,7 +116,7 @@ export default function SubmissionForm() {
             
             {/* Center Content */}
             <div className="flex-1 text-center">
-              <h1 className="text-2xl font-bold text-yellow-400">Divalaser Software Solutions</h1>
+              <h1 className="text-2xl font-bold text-yellow-400">{t('companyName')}</h1>
             </div>
             
             {/* Georgia Tech Logo */}
@@ -131,44 +134,44 @@ export default function SubmissionForm() {
       <main className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Church Website Request Form</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('formTitle')}</h2>
             <p className="text-gray-600">
-              Please provide as much information as possible to help us create the perfect website for your church.
+              {t('formDescription')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Church Basic Information */}
             <section className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">Church Information</h3>
+              <h3 className="text-xl font-semibold text-gray-900 border-b pb-2">{t('churchInformation')}</h3>
               
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="churchName">Church Name *</Label>
+                  <Label htmlFor="churchName">{t('churchNameLabel')} *</Label>
                   <Input id="churchName" name="churchName" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="denomination">Denomination</Label>
+                  <Label htmlFor="denomination">{t('denomination')}</Label>
                   <Input id="denomination" name="denomination" />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="address">Street Address *</Label>
+                <Label htmlFor="address">{t('streetAddress')} *</Label>
                 <Input id="address" name="address" required />
               </div>
 
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="city">City *</Label>
+                  <Label htmlFor="city">{t('city')} *</Label>
                   <Input id="city" name="city" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="state">State/Province</Label>
+                  <Label htmlFor="state">{t('stateProvince')}</Label>
                   <Input id="state" name="state" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="zipCode">Zip/Postal Code</Label>
+                  <Label htmlFor="zipCode">{t('zipCode')}</Label>
                   <Input id="zipCode" name="zipCode" />
                 </div>
               </div>

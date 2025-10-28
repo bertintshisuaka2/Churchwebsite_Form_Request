@@ -1,9 +1,14 @@
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { APP_TITLE, getLoginUrl } from "@/const";
 import { Church, FileText, Users, Palette } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Link } from "wouter";
 
 export default function Home() {
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-400 to-sky-200">
       {/* Header */}
@@ -29,8 +34,8 @@ export default function Home() {
                   className="h-24 w-24 rounded-full object-cover border-4 border-yellow-400 shadow-lg"
                 />
               </div>
-              <h1 className="text-4xl font-bold text-yellow-400 mb-2">Divalaser Software Solutions</h1>
-              <p className="text-yellow-300 text-sm">Building Excellence in Digital Solutions</p>
+              <h1 className="text-4xl font-bold text-yellow-400 mb-2">{t('companyName')}</h1>
+              <p className="text-yellow-300 text-sm">{t('tagline')}</p>
             </div>
             
             {/* Georgia Tech Logo */}
@@ -43,10 +48,11 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Admin Login Button */}
-          <div className="flex justify-end mt-4">
+          {/* Language Switcher and Admin Login */}
+          <div className="flex justify-end items-center gap-3 mt-4">
+            <LanguageSwitcher />
             <a href={getLoginUrl("/admin")}>
-              <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400">Admin Login</Button>
+              <Button variant="outline" size="sm" className="bg-yellow-400 text-black hover:bg-yellow-500 border-yellow-400">{t('adminLogin')}</Button>
             </a>
           </div>
         </div>
@@ -57,16 +63,16 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Build Your Church's Digital Presence
+              {t('heroTitle')}
             </h2>
             <div className="mb-6 p-4 bg-white/80 rounded-lg shadow-sm">
-              <p className="text-lg font-semibold text-gray-800 mb-2">Matthew 24:14 (NKJV)</p>
+              <p className="text-lg font-semibold text-gray-800 mb-2">{t('bibleVerse')}</p>
               <p className="text-lg italic text-gray-700">
-                "And this gospel of the kingdom will be preached in all the world as a witness to all the nations, and then the end will come."
+                "{t('bibleText')}"
               </p>
             </div>
             <p className="text-xl text-gray-700 mb-8">
-              Let us help you create a beautiful, functional website that serves your congregation and reaches the ends of the earth.
+              {t('heroDescription')}
             </p>
           </div>
 
@@ -82,7 +88,7 @@ export default function Home() {
           <div className="pt-8">
             <Link href="/submit">
               <Button size="lg" className="text-lg px-8 py-6">
-                Get Started - Request Your Website
+                {t('getStarted')}
               </Button>
             </Link>
           </div>
@@ -95,9 +101,9 @@ export default function Home() {
                   <FileText className="h-8 w-8 text-blue-600" />
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Easy Process</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('easyProcess')}</h3>
               <p className="text-gray-600">
-                Simply fill out our comprehensive form with your church's information and requirements.
+                {t('easyProcessDesc')}
               </p>
             </div>
 
@@ -107,9 +113,9 @@ export default function Home() {
                   <Palette className="h-8 w-8 text-blue-600" />
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Custom Design</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('customDesign')}</h3>
               <p className="text-gray-600">
-                We'll create a unique website that reflects your church's mission, vision, and style.
+                {t('customDesignDesc')}
               </p>
             </div>
 
@@ -119,58 +125,58 @@ export default function Home() {
                   <Users className="h-8 w-8 text-blue-600" />
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Reach More People</h3>
+              <h3 className="text-xl font-semibold mb-2">{t('reachMore')}</h3>
               <p className="text-gray-600">
-                Connect with your congregation and welcome new visitors with an engaging online presence.
+                {t('reachMoreDesc')}
               </p>
             </div>
           </div>
 
           {/* What We Include */}
           <div className="pt-16 text-left max-w-3xl mx-auto">
-            <h3 className="text-3xl font-bold text-center mb-8">What's Included</h3>
+            <h3 className="text-3xl font-bold text-center mb-8">{t('whatsIncluded')}</h3>
             <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 space-y-4">
               <div className="flex items-start gap-3">
                 <div className="mt-1 h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <p className="text-gray-700">Home page with welcoming design and clear navigation</p>
+                <p className="text-gray-700">{t('feature1')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="mt-1 h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <p className="text-gray-700">About page with mission, vision, and church history</p>
+                <p className="text-gray-700">{t('feature2')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="mt-1 h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <p className="text-gray-700">Service times, location, and visitor information</p>
+                <p className="text-gray-700">{t('feature3')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="mt-1 h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <p className="text-gray-700">Ministries and programs showcase</p>
+                <p className="text-gray-700">{t('feature4')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="mt-1 h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <p className="text-gray-700">Events calendar and blog capabilities</p>
+                <p className="text-gray-700">{t('feature5')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="mt-1 h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <p className="text-gray-700">Contact form and online giving integration</p>
+                <p className="text-gray-700">{t('feature6')}</p>
               </div>
               <div className="flex items-start gap-3">
                 <div className="mt-1 h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <p className="text-gray-700">Mobile-responsive design for all devices</p>
+                <p className="text-gray-700">{t('feature7')}</p>
               </div>
             </div>
           </div>
@@ -180,7 +186,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t bg-gray-50 mt-24">
         <div className="container mx-auto px-4 py-8 text-center text-gray-600">
-          <p>&copy; 2025 Divalaser Software Solutions. All rights reserved.</p>
+          <p>{t('copyright')}</p>
         </div>
       </footer>
     </div>
