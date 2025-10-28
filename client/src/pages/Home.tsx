@@ -66,7 +66,7 @@ export default function Home() {
               </p>
             </div>
             <p className="text-xl text-gray-700 mb-8">
-              Let us help you create a beautiful, functional website that serves your congregation and reaches all the world.
+              Let us help you create a beautiful, functional website that serves your congregation and reaches the ends of the earth.
             </p>
           </div>
 

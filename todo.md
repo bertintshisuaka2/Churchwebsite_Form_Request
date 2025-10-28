@@ -46,3 +46,7 @@
 
 - [x] Add full Matthew 24:14 NKJV verse text to hero section
 
+
+
+- [x] Change "reaches all the world" to "reaches the ends of the earth"
+
