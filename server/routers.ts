@@ -227,6 +227,12 @@ export const appRouter = router({
           details: `Permanently deleted submission`,
         });
         
+        // Send notification to owner about permanent deletion
+        await notifyOwner({
+          title: '🚨 Critical Action: Permanent Deletion',
+          content: `Administrator ${ctx.user.name || 'Unknown'} permanently deleted submission:\n\nChurch: ${submission?.churchName || 'Unknown'}\nContact: ${submission?.contactName || 'Unknown'}\nEmail: ${submission?.email || 'Unknown'}\nSubmission ID: ${input.id}\n\nThis action cannot be undone.`,
+        });
+        
         return { success: true };
       }),
   }),

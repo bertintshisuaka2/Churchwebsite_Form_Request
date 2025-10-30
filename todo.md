@@ -113,3 +113,8 @@
 - [x] Add activity log tab to admin dashboard
 - [x] Display activity log with timestamp, action type, user, and affected submission
 
+
+
+- [x] Implement notification system for critical actions
+- [x] Send email notifications to owner for permanent deletions
+
