@@ -85,3 +85,10 @@
 - [x] Require PIN (3495) verification before permanently deleting from trash
 - [x] Add confirmation dialog with church name before permanent deletion
 
+
+
+- [x] Update permanent delete confirmation to show file name and offer restore option
+- [x] Add "Yes" button to permanently delete and "No" button to restore
+- [x] Add restore functionality in trash section (already exists, verify it works)
+- [x] Create statistics dashboard showing total submitted files and deleted files counts
+

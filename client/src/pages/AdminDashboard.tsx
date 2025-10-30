@@ -357,6 +357,45 @@ export default function AdminDashboard() {
             </Button>
           </Link>
         </div>
+        
+        {/* Statistics Dashboard */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">{t('totalSubmissions')}</p>
+                <p className="text-3xl font-bold text-blue-600 mt-2">{submissions?.length || 0}</p>
+              </div>
+              <div className="bg-blue-100 rounded-full p-3">
+                <Church className="h-8 w-8 text-blue-600" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">{t('deletedFiles')}</p>
+                <p className="text-3xl font-bold text-red-600 mt-2">{trashedSubmissions?.length || 0}</p>
+              </div>
+              <div className="bg-red-100 rounded-full p-3">
+                <Trash2 className="h-8 w-8 text-red-600" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">{t('totalFiles')}</p>
+                <p className="text-3xl font-bold text-green-600 mt-2">{(submissions?.length || 0) + (trashedSubmissions?.length || 0)}</p>
+              </div>
+              <div className="bg-green-100 rounded-full p-3">
+                <Church className="h-8 w-8 text-green-600" />
+              </div>
+            </div>
+          </div>
+        </div>
 
         <Tabs defaultValue="active" className="w-full">
           <TabsList className="mb-4">
@@ -603,8 +642,22 @@ export default function AdminDashboard() {
               )}
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setPermanentDeleteDialogOpen(false)}>
-                {t('cancel')}
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  if (deletePinInput !== ADMIN_PIN) {
+                    setDeletePinError(t('incorrectPin'));
+                    return;
+                  }
+                  restoreSubmission.mutate({ id: selectedSubmission.id });
+                  setPermanentDeleteDialogOpen(false);
+                  setDeletePinInput("");
+                  setDeletePinError("");
+                }}
+                disabled={restoreSubmission.isPending}
+              >
+                {restoreSubmission.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('no')} - {t('restore')}
               </Button>
               <Button
                 variant="destructive"
@@ -612,7 +665,7 @@ export default function AdminDashboard() {
                 disabled={permanentlyDelete.isPending}
               >
                 {permanentlyDelete.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {t('deletePermanently')}
+                {t('yes')} - {t('deletePermanently')}
               </Button>
             </div>
           </div>

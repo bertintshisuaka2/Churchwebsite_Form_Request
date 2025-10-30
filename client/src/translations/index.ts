@@ -170,7 +170,14 @@ export const translations = {
     cannotBeUndone: "This action cannot be undone.",
     enterPinToConfirm: "Enter PIN to confirm (3495)",
     cancel: "Cancel",
+    yes: "Yes",
+    no: "No",
     deletePermanently: "Delete Permanently",
+    
+    // Statistics
+    totalSubmissions: "Total Submissions",
+    deletedFiles: "Deleted Files",
+    totalFiles: "Total Files",
     
     // Toasts
     statusUpdated: "Status updated successfully",
@@ -357,7 +364,14 @@ export const translations = {
     cannotBeUndone: "Cette action ne peut pas être annulée.",
     enterPinToConfirm: "Entrez le PIN pour confirmer (3495)",
     cancel: "Annuler",
+    yes: "Oui",
+    no: "Non",
     deletePermanently: "Supprimer Définitivement",
+    
+    // Statistics
+    totalSubmissions: "Total des Soumissions",
+    deletedFiles: "Fichiers Supprimés",
+    totalFiles: "Total des Fichiers",
     
     // Toasts
     statusUpdated: "Statut mis à jour avec succès",
