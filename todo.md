@@ -99,3 +99,10 @@
 - [x] Update statistics cards to show filtered counts
 - [x] Update submissions table to show filtered results
 
+
+
+- [x] Add search bar to admin dashboard
+- [x] Search submissions by church name, contact name, email, location, and other fields
+- [x] Update filtered results to include search query
+- [x] Add search functionality to both Active and Trash tabs
+

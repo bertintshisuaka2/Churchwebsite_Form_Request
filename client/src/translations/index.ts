@@ -187,6 +187,7 @@ export const translations = {
     custom: "Custom",
     from: "From",
     to: "To",
+    searchPlaceholder: "Search by church name, contact, email, location...",
     
     // Toasts
     statusUpdated: "Status updated successfully",
@@ -390,6 +391,7 @@ export const translations = {
     custom: "Personnalisé",
     from: "De",
     to: "À",
+    searchPlaceholder: "Rechercher par nom d'église, contact, email, lieu...",
     
     // Toasts
     statusUpdated: "Statut mis à jour avec succès",

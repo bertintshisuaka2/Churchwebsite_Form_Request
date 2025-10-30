@@ -55,6 +55,9 @@ export default function AdminDashboard() {
   const [dateRange, setDateRange] = useState<string>("all");
   const [customStartDate, setCustomStartDate] = useState<string>("");
   const [customEndDate, setCustomEndDate] = useState<string>("");
+  
+  // Search state
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     // Check if PIN was previously verified in this session
@@ -126,8 +129,31 @@ export default function AdminDashboard() {
     return items;
   };
   
-  const filteredSubmissions = filterByDateRange(submissions);
-  const filteredTrashedSubmissions = filterByDateRange(trashedSubmissions);
+  const dateFilteredSubmissions = filterByDateRange(submissions);
+  const dateFilteredTrashedSubmissions = filterByDateRange(trashedSubmissions);
+  
+  // Search filter function
+  const searchFilter = (items: any[]) => {
+    if (!searchQuery.trim()) return items;
+    
+    const query = searchQuery.toLowerCase();
+    return items.filter(item => {
+      return (
+        item.churchName?.toLowerCase().includes(query) ||
+        item.contactName?.toLowerCase().includes(query) ||
+        item.contactEmail?.toLowerCase().includes(query) ||
+        item.denomination?.toLowerCase().includes(query) ||
+        item.city?.toLowerCase().includes(query) ||
+        item.state?.toLowerCase().includes(query) ||
+        item.country?.toLowerCase().includes(query) ||
+        item.address?.toLowerCase().includes(query) ||
+        item.phone?.toLowerCase().includes(query)
+      );
+    });
+  };
+  
+  const filteredSubmissions = searchFilter(dateFilteredSubmissions);
+  const filteredTrashedSubmissions = searchFilter(dateFilteredTrashedSubmissions);
 
   const updateStatus = trpc.submissions.updateStatus.useMutation({
     onSuccess: () => {
@@ -409,8 +435,19 @@ export default function AdminDashboard() {
           </Link>
         </div>
         
-        {/* Date Range Filter */}
+        {/* Search and Filters */}
         <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 mb-6">
+          <div className="flex flex-wrap items-center gap-4 mb-4">
+            <div className="flex-1 min-w-[250px]">
+              <Input
+                type="text"
+                placeholder={t('searchPlaceholder')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
+            </div>
+          </div>
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
               <label className="text-sm font-medium text-gray-700">{t('dateRange')}:</label>
