@@ -92,3 +92,10 @@
 - [x] Add restore functionality in trash section (already exists, verify it works)
 - [x] Create statistics dashboard showing total submitted files and deleted files counts
 
+
+
+- [x] Add date range filter to statistics dashboard
+- [x] Filter submissions by date range (Today, This Week, This Month, This Year, All Time, Custom)
+- [x] Update statistics cards to show filtered counts
+- [x] Update submissions table to show filtered results
+

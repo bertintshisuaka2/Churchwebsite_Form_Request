@@ -178,6 +178,15 @@ export const translations = {
     totalSubmissions: "Total Submissions",
     deletedFiles: "Deleted Files",
     totalFiles: "Total Files",
+    dateRange: "Date Range",
+    allTime: "All Time",
+    today: "Today",
+    thisWeek: "This Week",
+    thisMonth: "This Month",
+    thisYear: "This Year",
+    custom: "Custom",
+    from: "From",
+    to: "To",
     
     // Toasts
     statusUpdated: "Status updated successfully",
@@ -372,6 +381,15 @@ export const translations = {
     totalSubmissions: "Total des Soumissions",
     deletedFiles: "Fichiers Supprimés",
     totalFiles: "Total des Fichiers",
+    dateRange: "Période",
+    allTime: "Tout le Temps",
+    today: "Aujourd'hui",
+    thisWeek: "Cette Semaine",
+    thisMonth: "Ce Mois",
+    thisYear: "Cette Année",
+    custom: "Personnalisé",
+    from: "De",
+    to: "À",
     
     // Toasts
     statusUpdated: "Statut mis à jour avec succès",

@@ -50,6 +50,11 @@ export default function AdminDashboard() {
   const [selectedSubmission, setSelectedSubmission] = useState<any>(null);
   const [deletePinInput, setDeletePinInput] = useState("");
   const [deletePinError, setDeletePinError] = useState("");
+  
+  // Date range filter state
+  const [dateRange, setDateRange] = useState<string>("all");
+  const [customStartDate, setCustomStartDate] = useState<string>("");
+  const [customEndDate, setCustomEndDate] = useState<string>("");
 
   useEffect(() => {
     // Check if PIN was previously verified in this session
@@ -77,6 +82,52 @@ export default function AdminDashboard() {
   const { data: trashedSubmissions, isLoading: isLoadingTrashed, refetch: refetchTrashed } = trpc.submissions.listTrashed.useQuery(undefined, {
     enabled: isAuthenticated && user?.role === 'admin',
   });
+  
+  // Filter submissions by date range
+  const filterByDateRange = (items: any[] | undefined) => {
+    if (!items) return [];
+    
+    const now = new Date();
+    let startDate: Date | null = null;
+    
+    switch (dateRange) {
+      case 'today':
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case 'week':
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case 'month':
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      case 'year':
+        startDate = new Date(now.getFullYear(), 0, 1);
+        break;
+      case 'custom':
+        if (customStartDate && customEndDate) {
+          const start = new Date(customStartDate);
+          const end = new Date(customEndDate);
+          end.setHours(23, 59, 59, 999);
+          return items.filter(item => {
+            const itemDate = new Date(item.createdAt);
+            return itemDate >= start && itemDate <= end;
+          });
+        }
+        return items;
+      case 'all':
+      default:
+        return items;
+    }
+    
+    if (startDate) {
+      return items.filter(item => new Date(item.createdAt) >= startDate!);
+    }
+    
+    return items;
+  };
+  
+  const filteredSubmissions = filterByDateRange(submissions);
+  const filteredTrashedSubmissions = filterByDateRange(trashedSubmissions);
 
   const updateStatus = trpc.submissions.updateStatus.useMutation({
     onSuccess: () => {
@@ -358,13 +409,58 @@ export default function AdminDashboard() {
           </Link>
         </div>
         
+        {/* Date Range Filter */}
+        <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 mb-6">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700">{t('dateRange')}:</label>
+              <Select value={dateRange} onValueChange={setDateRange}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('allTime')}</SelectItem>
+                  <SelectItem value="today">{t('today')}</SelectItem>
+                  <SelectItem value="week">{t('thisWeek')}</SelectItem>
+                  <SelectItem value="month">{t('thisMonth')}</SelectItem>
+                  <SelectItem value="year">{t('thisYear')}</SelectItem>
+                  <SelectItem value="custom">{t('custom')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {dateRange === 'custom' && (
+              <>
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">{t('from')}:</label>
+                  <Input
+                    type="date"
+                    value={customStartDate}
+                    onChange={(e) => setCustomStartDate(e.target.value)}
+                    className="w-[150px]"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">{t('to')}:</label>
+                  <Input
+                    type="date"
+                    value={customEndDate}
+                    onChange={(e) => setCustomEndDate(e.target.value)}
+                    className="w-[150px]"
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        
         {/* Statistics Dashboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">{t('totalSubmissions')}</p>
-                <p className="text-3xl font-bold text-blue-600 mt-2">{submissions?.length || 0}</p>
+                <p className="text-3xl font-bold text-blue-600 mt-2">{filteredSubmissions.length}</p>
               </div>
               <div className="bg-blue-100 rounded-full p-3">
                 <Church className="h-8 w-8 text-blue-600" />
@@ -376,7 +472,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">{t('deletedFiles')}</p>
-                <p className="text-3xl font-bold text-red-600 mt-2">{trashedSubmissions?.length || 0}</p>
+                <p className="text-3xl font-bold text-red-600 mt-2">{filteredTrashedSubmissions.length}</p>
               </div>
               <div className="bg-red-100 rounded-full p-3">
                 <Trash2 className="h-8 w-8 text-red-600" />
@@ -388,7 +484,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">{t('totalFiles')}</p>
-                <p className="text-3xl font-bold text-green-600 mt-2">{(submissions?.length || 0) + (trashedSubmissions?.length || 0)}</p>
+                <p className="text-3xl font-bold text-green-600 mt-2">{filteredSubmissions.length + filteredTrashedSubmissions.length}</p>
               </div>
               <div className="bg-green-100 rounded-full p-3">
                 <Church className="h-8 w-8 text-green-600" />
@@ -408,7 +504,7 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-center py-16">
                 <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
               </div>
-            ) : submissions && submissions.length > 0 ? (
+            ) : filteredSubmissions.length > 0 ? (
               <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
                 <Table>
                   <TableHeader>
@@ -422,7 +518,7 @@ export default function AdminDashboard() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {submissions.map((submission) => (
+                    {filteredSubmissions.map((submission) => (
                       <TableRow key={submission.id}>
                         <TableCell className="font-medium">
                           <div>
@@ -498,7 +594,7 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-center py-16">
                 <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
               </div>
-            ) : trashedSubmissions && trashedSubmissions.length > 0 ? (
+            ) : filteredTrashedSubmissions.length > 0 ? (
               <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
                 <Table>
                   <TableHeader>
@@ -511,7 +607,7 @@ export default function AdminDashboard() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {trashedSubmissions.map((submission) => (
+                    {filteredTrashedSubmissions.map((submission) => (
                       <TableRow key={submission.id} className="opacity-60">
                         <TableCell className="font-medium">
                           <div>
