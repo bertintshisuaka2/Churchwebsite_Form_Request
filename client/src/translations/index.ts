@@ -161,6 +161,17 @@ export const translations = {
     verifyPin: "Verify PIN",
     incorrectPin: "Incorrect PIN. Please try again.",
     
+    // Delete Confirmations
+    confirmDelete: "Confirm Delete",
+    areYouSureDelete: "Are you sure you want to move this submission to trash:",
+    moveToTrash: "Move to Trash",
+    confirmPermanentDelete: "Confirm Permanent Delete",
+    areYouSurePermanentDelete: "Are you sure you want to permanently delete:",
+    cannotBeUndone: "This action cannot be undone.",
+    enterPinToConfirm: "Enter PIN to confirm (3495)",
+    cancel: "Cancel",
+    deletePermanently: "Delete Permanently",
+    
     // Toasts
     statusUpdated: "Status updated successfully",
     movedToTrash: "Submission moved to trash",
@@ -336,6 +347,17 @@ export const translations = {
     enterPin: "Entrer le PIN",
     verifyPin: "Vérifier le PIN",
     incorrectPin: "PIN incorrect. Veuillez réessayer.",
+    
+    // Delete Confirmations
+    confirmDelete: "Confirmer la Suppression",
+    areYouSureDelete: "Êtes-vous sûr de vouloir déplacer cette soumission vers la corbeille:",
+    moveToTrash: "Déplacer vers la Corbeille",
+    confirmPermanentDelete: "Confirmer la Suppression Définitive",
+    areYouSurePermanentDelete: "Êtes-vous sûr de vouloir supprimer définitivement:",
+    cannotBeUndone: "Cette action ne peut pas être annulée.",
+    enterPinToConfirm: "Entrez le PIN pour confirmer (3495)",
+    cancel: "Annuler",
+    deletePermanently: "Supprimer Définitivement",
     
     // Toasts
     statusUpdated: "Statut mis à jour avec succès",

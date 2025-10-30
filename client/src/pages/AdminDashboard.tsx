@@ -43,6 +43,13 @@ export default function AdminDashboard() {
   const [pinVerified, setPinVerified] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
+  
+  // Delete confirmation states
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [permanentDeleteDialogOpen, setPermanentDeleteDialogOpen] = useState(false);
+  const [selectedSubmission, setSelectedSubmission] = useState<any>(null);
+  const [deletePinInput, setDeletePinInput] = useState("");
+  const [deletePinError, setDeletePinError] = useState("");
 
   useEffect(() => {
     // Check if PIN was previously verified in this session
@@ -85,11 +92,31 @@ export default function AdminDashboard() {
     onSuccess: () => {
       toast.success(t('movedToTrash'));
       refetch();
+      setDeleteDialogOpen(false);
+      setSelectedSubmission(null);
+      setDeletePinInput("");
+      setDeletePinError("");
     },
     onError: (error) => {
       toast.error("Failed to delete: " + error.message);
+      setDeletePinError("Failed to delete");
     },
   });
+  
+  const handleDeleteClick = (submission: any) => {
+    setSelectedSubmission(submission);
+    setDeleteDialogOpen(true);
+    setDeletePinInput("");
+    setDeletePinError("");
+  };
+  
+  const handleConfirmDelete = () => {
+    if (deletePinInput !== ADMIN_PIN) {
+      setDeletePinError(t('incorrectPin'));
+      return;
+    }
+    deleteSubmission.mutate({ id: selectedSubmission.id });
+  };
 
   const restoreSubmission = trpc.submissions.restore.useMutation({
     onSuccess: () => {
@@ -106,11 +133,31 @@ export default function AdminDashboard() {
     onSuccess: () => {
       toast.success(t('permanentlyDeleted'));
       refetchTrashed();
+      setPermanentDeleteDialogOpen(false);
+      setSelectedSubmission(null);
+      setDeletePinInput("");
+      setDeletePinError("");
     },
     onError: (error) => {
       toast.error("Failed to permanently delete: " + error.message);
+      setDeletePinError("Failed to permanently delete");
     },
   });
+  
+  const handlePermanentDeleteClick = (submission: any) => {
+    setSelectedSubmission(submission);
+    setPermanentDeleteDialogOpen(true);
+    setDeletePinInput("");
+    setDeletePinError("");
+  };
+  
+  const handleConfirmPermanentDelete = () => {
+    if (deletePinInput !== ADMIN_PIN) {
+      setDeletePinError(t('incorrectPin'));
+      return;
+    }
+    permanentlyDelete.mutate({ id: selectedSubmission.id });
+  };
 
   if (loading) {
     return (
@@ -387,7 +434,7 @@ export default function AdminDashboard() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => deleteSubmission.mutate({ id: submission.id })}
+                              onClick={() => handleDeleteClick(submission)}
                               disabled={deleteSubmission.isPending}
                             >
                               <Trash2 className="h-4 w-4 text-red-600" />
@@ -464,11 +511,7 @@ export default function AdminDashboard() {
                             <Button
                               variant="destructive"
                               size="sm"
-                              onClick={() => {
-                                if (confirm('Are you sure you want to permanently delete this submission? This action cannot be undone.')) {
-                                  permanentlyDelete.mutate({ id: submission.id });
-                                }
-                              }}
+                              onClick={() => handlePermanentDeleteClick(submission)}
                               disabled={permanentlyDelete.isPending}
                             >
                               {t('deleteForever')}
@@ -489,6 +532,92 @@ export default function AdminDashboard() {
           </TabsContent>
         </Tabs>
       </main>
+      
+      {/* Delete to Trash Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('confirmDelete')}</DialogTitle>
+            <DialogDescription>
+              {t('areYouSureDelete')} <strong>{selectedSubmission?.churchName}</strong>?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t('enterPinToConfirm')}</label>
+              <Input
+                type="password"
+                maxLength={4}
+                value={deletePinInput}
+                onChange={(e) => {
+                  setDeletePinInput(e.target.value);
+                  setDeletePinError("");
+                }}
+                placeholder="****"
+              />
+              {deletePinError && (
+                <p className="text-sm text-red-600">{deletePinError}</p>
+              )}
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+                {t('cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleConfirmDelete}
+                disabled={deleteSubmission.isPending}
+              >
+                {deleteSubmission.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('moveToTrash')}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Permanent Delete Confirmation Dialog */}
+      <Dialog open={permanentDeleteDialogOpen} onOpenChange={setPermanentDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('confirmPermanentDelete')}</DialogTitle>
+            <DialogDescription>
+              {t('areYouSurePermanentDelete')} <strong>{selectedSubmission?.churchName}</strong>? {t('cannotBeUndone')}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{t('enterPinToConfirm')}</label>
+              <Input
+                type="password"
+                maxLength={4}
+                value={deletePinInput}
+                onChange={(e) => {
+                  setDeletePinInput(e.target.value);
+                  setDeletePinError("");
+                }}
+                placeholder="****"
+              />
+              {deletePinError && (
+                <p className="text-sm text-red-600">{deletePinError}</p>
+              )}
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setPermanentDeleteDialogOpen(false)}>
+                {t('cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleConfirmPermanentDelete}
+                disabled={permanentlyDelete.isPending}
+              >
+                {permanentlyDelete.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('deletePermanently')}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
     </>
   );

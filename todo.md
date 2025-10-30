@@ -78,3 +78,10 @@
 
 - [x] Create comprehensive README.md file for GitHub repository
 
+
+
+- [x] Require PIN (3495) verification before moving submission to trash
+- [x] Add confirmation dialog with church name before deleting to trash
+- [x] Require PIN (3495) verification before permanently deleting from trash
+- [x] Add confirmation dialog with church name before permanent deletion
+
