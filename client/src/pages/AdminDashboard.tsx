@@ -85,6 +85,9 @@ export default function AdminDashboard() {
   const { data: trashedSubmissions, isLoading: isLoadingTrashed, refetch: refetchTrashed } = trpc.submissions.listTrashed.useQuery(undefined, {
     enabled: isAuthenticated && user?.role === 'admin',
   });
+  const { data: activityLogs, isLoading: isLoadingActivity } = trpc.activityLogs.list.useQuery(undefined, {
+    enabled: isAuthenticated && user?.role === 'admin',
+  });
   
   // Filter submissions by date range
   const filterByDateRange = (items: any[] | undefined) => {
@@ -534,6 +537,7 @@ export default function AdminDashboard() {
           <TabsList className="mb-4">
             <TabsTrigger value="active">{t('activeSubmissions')}</TabsTrigger>
             <TabsTrigger value="trash">{t('trash')} ({trashedSubmissions?.length || 0})</TabsTrigger>
+            <TabsTrigger value="activity">{t('activityLog')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="active">
@@ -699,6 +703,52 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-lg shadow-md border border-gray-100 p-16 text-center">
                 <p className="text-gray-600 text-lg">{t('trashEmpty')}</p>
                 <p className="text-gray-500 mt-2">{t('deletedSubmissions')}</p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="activity">
+            {isLoadingActivity ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              </div>
+            ) : activityLogs && activityLogs.length > 0 ? (
+              <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('action')}</TableHead>
+                      <TableHead>{t('submissionName')}</TableHead>
+                      <TableHead>{t('details')}</TableHead>
+                      <TableHead>{t('performedBy')}</TableHead>
+                      <TableHead>{t('timestamp')}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {activityLogs.map((log: any) => (
+                      <TableRow key={log.id}>
+                        <TableCell>
+                          {log.actionType === 'status_change' && t('actionStatusChange')}
+                          {log.actionType === 'delete' && t('actionDelete')}
+                          {log.actionType === 'restore' && t('actionRestore')}
+                          {log.actionType === 'permanent_delete' && t('actionPermanentDelete')}
+                          {log.actionType === 'create' && t('actionCreate')}
+                        </TableCell>
+                        <TableCell className="font-medium">{log.submissionName}</TableCell>
+                        <TableCell className="text-sm text-gray-600">{log.details}</TableCell>
+                        <TableCell>{log.userName}</TableCell>
+                        <TableCell className="text-sm">
+                          {new Date(log.createdAt).toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow-md border border-gray-100 p-16 text-center">
+                <p className="text-gray-600 text-lg">{t('noActivity')}</p>
+                <p className="text-gray-500 mt-2">{t('activityWillAppear')}</p>
               </div>
             )}
           </TabsContent>

@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { createChurchSubmission, getAllChurchSubmissions, getChurchSubmissionById, updateChurchSubmissionStatus, getTrashedChurchSubmissions, softDeleteChurchSubmission, restoreChurchSubmission, permanentlyDeleteChurchSubmission } from "./db";
+import { createChurchSubmission, getAllChurchSubmissions, getChurchSubmissionById, updateChurchSubmissionStatus, getTrashedChurchSubmissions, softDeleteChurchSubmission, restoreChurchSubmission, permanentlyDeleteChurchSubmission, createActivityLog, getAllActivityLogs } from "./db";
 import { notifyOwner } from "./_core/notification";
 
 export const appRouter = router({
@@ -126,7 +126,24 @@ export const appRouter = router({
           throw new Error('Unauthorized');
         }
 
+        // Get old submission data
+        const submission = await getChurchSubmissionById(input.id);
+        const oldStatus = submission?.status;
+
         await updateChurchSubmissionStatus(input.id, input.status);
+        
+        // Log the activity
+        await createActivityLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name || 'Unknown',
+          actionType: 'status_change',
+          submissionId: input.id,
+          submissionName: submission?.churchName || 'Unknown',
+          oldValue: oldStatus,
+          newValue: input.status,
+          details: `Status changed from ${oldStatus} to ${input.status}`,
+        });
+        
         return { success: true };
       }),
 
@@ -137,7 +154,19 @@ export const appRouter = router({
           throw new Error('Unauthorized');
         }
 
+        const submission = await getChurchSubmissionById(input.id);
         await softDeleteChurchSubmission(input.id);
+        
+        // Log the activity
+        await createActivityLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name || 'Unknown',
+          actionType: 'delete',
+          submissionId: input.id,
+          submissionName: submission?.churchName || 'Unknown',
+          details: `Moved submission to trash`,
+        });
+        
         return { success: true };
       }),
 
@@ -162,7 +191,19 @@ export const appRouter = router({
           throw new Error('Unauthorized');
         }
 
+        const submission = await getChurchSubmissionById(input.id);
         await restoreChurchSubmission(input.id);
+        
+        // Log the activity
+        await createActivityLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name || 'Unknown',
+          actionType: 'restore',
+          submissionId: input.id,
+          submissionName: submission?.churchName || 'Unknown',
+          details: `Restored submission from trash`,
+        });
+        
         return { success: true };
       }),
 
@@ -173,9 +214,31 @@ export const appRouter = router({
           throw new Error('Unauthorized');
         }
 
+        const submission = await getChurchSubmissionById(input.id);
         await permanentlyDeleteChurchSubmission(input.id);
+        
+        // Log the activity
+        await createActivityLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name || 'Unknown',
+          actionType: 'permanent_delete',
+          submissionId: input.id,
+          submissionName: submission?.churchName || 'Unknown',
+          details: `Permanently deleted submission`,
+        });
+        
         return { success: true };
       }),
+  }),
+
+  activityLogs: router({
+    list: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new Error('Unauthorized');
+      }
+      
+      return await getAllActivityLogs();
+    }),
   }),
 });
 

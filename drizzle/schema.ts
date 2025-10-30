@@ -82,3 +82,28 @@ export const churchSubmissions = mysqlTable("church_submissions", {
 export type ChurchSubmission = typeof churchSubmissions.$inferSelect;
 export type InsertChurchSubmission = typeof churchSubmissions.$inferInsert;
 
+/**
+ * Activity log for tracking administrator actions
+ */
+export const activityLogs = mysqlTable("activity_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("user_id").notNull(), // Admin user who performed the action
+  userName: varchar("user_name", { length: 255 }), // Store name for display
+  actionType: mysqlEnum("action_type", [
+    "status_change",
+    "delete",
+    "restore",
+    "permanent_delete",
+    "create"
+  ]).notNull(),
+  submissionId: int("submission_id").notNull(), // ID of affected submission
+  submissionName: varchar("submission_name", { length: 255 }), // Church name for display
+  oldValue: text("old_value"), // Previous value (for status changes)
+  newValue: text("new_value"), // New value (for status changes)
+  details: text("details"), // Additional context
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ActivityLog = typeof activityLogs.$inferSelect;
+export type InsertActivityLog = typeof activityLogs.$inferInsert;
+

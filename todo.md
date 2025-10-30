@@ -106,3 +106,10 @@
 - [x] Update filtered results to include search query
 - [x] Add search functionality to both Active and Trash tabs
 
+
+
+- [x] Create activity log database table
+- [x] Track administrator actions (status changes, deletions, restorations)
+- [x] Add activity log tab to admin dashboard
+- [x] Display activity log with timestamp, action type, user, and affected submission
+

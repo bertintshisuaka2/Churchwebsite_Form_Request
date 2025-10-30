@@ -1,6 +1,6 @@
 import { eq, isNull, isNotNull, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, churchSubmissions, InsertChurchSubmission, ChurchSubmission } from "../drizzle/schema";
+import { InsertUser, users, churchSubmissions, InsertChurchSubmission, ChurchSubmission, activityLogs, InsertActivityLog } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -174,5 +174,37 @@ export async function updateChurchSubmissionStatus(id: number, status: "pending"
   }
 
   await db.update(churchSubmissions).set({ status }).where(eq(churchSubmissions.id, id));
+}
+
+
+// Activity Log Functions
+export async function createActivityLog(log: InsertActivityLog): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create activity log: database not available");
+    return;
+  }
+
+  await db.insert(activityLogs).values(log);
+}
+
+export async function getAllActivityLogs() {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return await db.select().from(activityLogs).orderBy(desc(activityLogs.createdAt));
+}
+
+export async function getActivityLogsBySubmission(submissionId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return await db.select().from(activityLogs)
+    .where(eq(activityLogs.submissionId, submissionId))
+    .orderBy(desc(activityLogs.createdAt));
 }
 
